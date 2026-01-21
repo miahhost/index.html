@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiahHost - Premium Web Hosting</title>
+<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s, color 0.3s;
+}
+body.dark-mode {
+    background-color: #1a1a2e;
+    color: #e6e6e6;
+}
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 50%, #25d366 100%);
+    color: white;
+    height: 100vh;
+    position: fixed;
+    left: -260px;
+    top: 0;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    z-index: 1000;
+}
+.sidebar.active {
+    left: 0;
+}
+.logo-container {
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+}
+.logo span {
+    color: #ffcc00;
+}
+.nav-menu ul {
+    list-style: none;
+    padding: 0;
+}
+.nav-menu ul li {
+    margin-bottom: 5px;
+}
+.nav-menu ul li a {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    padding: 15px 25px;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+.nav-menu ul li a i {
+    margin-right: 15px;
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+}
+.nav-menu ul li a:hover {
+    background-color: rgba(255,255,255,0.2);
+    padding-left: 30px;
+}
+.nav-menu ul li.active a {
+    background-color: rgba(255,255,255,0.3);
+    border-left: 4px solid #ffcc00;
+}
+/* Top bar */
+.top-bar {
+    background-color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    transition: background-color 0.3s;
+}
+body.dark-mode .top-bar {
+    background-color: #16213e;
+    color: #e6e6e6;
+}
+.top-bar-left {
+    display: flex;
+    align-items: center;
+}
+.mobile-menu-toggle {
+    font-size: 1.8rem;
+    cursor: pointer;
+    margin-right: 20px;
+}
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2575fc;
+    display: flex;
+    align-items: center;
+}
+.page-title img {
+    height: 40px;
+    margin-right: 10px;
+    object-fit: contain;
+}
+body.dark-mode .page-title {
+    color: #4d9aff;
+}
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: relative;
+    width: 60px;
+    height: 30px;
+}
+.dark-mode-toggle input {
+    display: none;
+}
+.dark-mode-toggle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 30px;
+    background-color: #ddd;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+.dark-mode-toggle-label:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.dark-mode-toggle input:checked + .dark-mode-toggle-label {
+    background-color: #4d9aff;
+}
+.dark-mode-toggle input:checked + .dark-mode-toggle-label:after {
+    transform: translateX(30px);
+}
+.dark-mode-toggle-label i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #333;
+    transition: opacity 0.3s;
+}
+.dark-mode-toggle-label .fa-moon {
+    left: 8px;
+    opacity: 0;
+}
+.dark-mode-toggle-label .fa-sun {
+    right: 8px;
+    opacity: 1;
+}
+.dark-mode-toggle input:checked + .dark-mode-toggle-label .fa-moon {
+    opacity: 1;
+}
+.dark-mode-toggle input:checked + .dark-mode-toggle-label .fa-sun {
+    opacity: 0;
+}
+
+/* New Hero Section - Based on Screenshot */
+.hero {
+    background: linear-gradient(135deg, #1a2a6c 0%, #2a4b8d 100%);
+    color: white;
+    padding: 80px 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,261.3C672,256,768,224,864,218.7C960,213,1056,235,1152,224C1248,213,1344,171,1392,149.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    background-size: cover;
+    background-position: bottom;
+}
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+.hero h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #ffcc00;
+}
+.promo-banner {
+    background-color: rgba(255, 255, 255, 0.2);
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 30px;
+    margin: 20px 0;
+    font-size: 10px;
+}
+.promo-code {
+    font-weight: 700;
+    font-size: 10px;
+    background-color: #ffcc00;
+    color: #333;
+    padding: 6px 18px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+.promo-code:hover {
+    background-color: #ffd93d;
+    transform: scale(1.05);
+}
+.promo-code.copied::after {
+    content: 'Copied!';
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #25d366;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    white-space: nowrap;
+}
+.trustpilot {
+    font-weight: 700;
+    font-size: 15px;
+    background-color: #22CE83;
+    color: #333;
+    padding: 6px 18px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+.trustpilot a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+}
+.trustpilot a:hover {
+    color: #F5FFFA;
+}
+.trustpilot .stars {
+    color: #276CF5;
+    margin-right: 8px;
+}
+.tagline {
+    font-size: 1.8rem;
+    margin: 20px 0;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+    min-height: 60px;
+}
+.typing-text {
+    color: #ffcc00;
+    font-weight: 700;
+    border-right: 2px solid #ffcc00;
+    animation: blink 0.7s infinite;
+    font-size: 2.2rem;
+}
+@keyframes blink {
+    0%, 100% { border-color: transparent; }
+    50% { border-color: #ffcc00; }
+}
+.feature {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    color: #a8d1ff;
+}
+.get-started-btn {
+    background: #ffcc00;
+    color: #333;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+.get-started-btn:hover {
+    background: #ffd93d;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Domain Search Section - Based on Screenshot */
+.domain-search {
+    background-color: white;
+    padding: 40px 20px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+body.dark-mode .domain-search {
+    background-color: #16213e;
+    color: #e6e6e6;
+}
+.domain-search-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: #f5f7fa;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: background-color 0.3s;
+}
+body.dark-mode .domain-search-container {
+    background: #1a1a2e;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.domain-search h2 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    color: #1a2a6c;
+    font-weight: 700;
+}
+body.dark-mode .domain-search h2 {
+    color: #4d9aff;
+}
+.domain-search p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #666;
+}
+body.dark-mode .domain-search p {
+    color: #b0b0b0;
+}
+.domain-search-form {
+    display: flex;
+    margin-bottom: 25px;
+}
+.domain-search-input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+    background: white;
+    color: #333;
+}
+body.dark-mode .domain-search-input {
+    background: #1a1a2e;
+    color: #e6e6e6;
+    border-color: #2d3746;
+}
+.domain-search-input:focus {
+    border-color: #2575fc;
+}
+.domain-search-button {
+    background: #2575fc;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 0 5px 5px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.domain-search-button:hover {
+    background: #1a5fd8;
+}
+.domain-tlds {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.domain-tld {
+    background: white;
+    border-radius: 8px;
+    padding: 15px 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+body.dark-mode .domain-tld {
+    background: #1a1a2e;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+.domain-tld:hover {
+    transform: translateY(-3px);
+}
+.domain-tld-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a2a6c;
+    margin-bottom: 5px;
+}
+body.dark-mode .domain-tld-name {
+    color: #4d9aff;
+}
+.domain-tld-price {
+    font-size: 1.1rem;
+    color: #2575fc;
+    font-weight: 600;
+}
+body.dark-mode .domain-tld-price {
+    color: #66b3ff;
+}
+
+/* Packages Section */
+.packages {
+    padding: 70px 30px;
+    background: #f5f7fa;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+body.dark-mode .packages {
+    background: #1a1a2e;
+}
+.packages h2 {
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: #1a2a6c;
+}
+body.dark-mode .packages h2 {
+    color: #4d9aff;
+}
+.package-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.package {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 280px;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+    position: relative;
+}
+body.dark-mode .package {
+    background: #16213e;
+    color: #e6e6e6;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.package:hover {
+    transform: translateY(-10px);
+}
+.package-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+body.dark-mode .package-header {
+    border-bottom: 1px solid #2d3746;
+}
+.package-name {
+    font-size: 1.8rem;
+    color: #1a2a6c;
+    margin-bottom: 10px;
+}
+body.dark-mode .package-name {
+    color: #4d9aff;
+}
+.package-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2575fc;
+    margin-bottom: 5px;
+}
+body.dark-mode .package-price {
+    color: #66b3ff;
+}
+.package-period {
+    color: #666;
+    font-size: 1rem;
+}
+body.dark-mode .package-period {
+    color: #a0a0a0;
+}
+.package-features {
+    text-align: left;
+    margin-bottom: 30px;
+}
+.package-features ul {
+    list-style: none;
+}
+.package-features li {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+}
+.package-features li i {
+    color: #25d366;
+    margin-right: 10px;
+}
+.view-plans-btn {
+    background: #2575fc;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+    text-decoration: none;
+    display: block;
+}
+.view-plans-btn:hover {
+    background: #1a5fd8;
+}
+
+/* Our Services Section */
+.our-services {
+    padding: 70px 30px;
+    background: white;
+    transition: background-color 0.3s;
+}
+body.dark-mode .our-services {
+    background: #16213e;
+    color: #e6e6e6;
+}
+.our-services h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: #1a2a6c;
+}
+body.dark-mode .our-services h2 {
+    color: #4d9aff;
+}
+.services-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.service-column {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+.service-column h3 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #2575fc;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #2575fc;
+    display: inline-block;
+}
+body.dark-mode .service-column h3 {
+    color: #4d9aff;
+    border-bottom: 2px solid #4d9aff;
+}
+.service-item {
+    background: #f5f7fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+}
+body.dark-mode .service-item {
+    background: #1a1a2e;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+.service-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.service-item h4 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #1a2a6c;
+    display: flex;
+    align-items: center;
+}
+body.dark-mode .service-item h4 {
+    color: #4d9aff;
+}
+.service-item h4 i {
+    margin-right: 10px;
+    color: #25d366;
+}
+.service-item p {
+    color: #666;
+    line-height: 1.5;
+}
+body.dark-mode .service-item p {
+    color: #b0b0b0;
+}
+
+/* NEW: BDIX Section */
+.bdix-section {
+    padding: 70px 30px;
+    background: #ffffff;
+    transition: background-color 0.3s;
+}
+body.dark-mode .bdix-section {
+    background: #16213e;
+}
+.bdix-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+.bdix-image, .bdix-content {
+    flex: 1;
+    min-width: 300px;
+}
+.bdix-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.bdix-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #1a2a6c;
+    font-weight: 700;
+}
+body.dark-mode .bdix-content h2 {
+    color: #4d9aff;
+}
+.bdix-content p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.7;
+    color: #666;
+}
+body.dark-mode .bdix-content p {
+    color: #b0b0b0;
+}
+
+/* Footer Section */
+.footer {
+    background: linear-gradient(135deg, #1a2a6c 0%, #2a4b8d 100%);
+    color: white;
+    padding: 50px 30px 20px;
+    margin-top: 0; /* Adjusted margin since the new section is above */
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+.footer-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #ffcc00;
+}
+.footer-section p {
+    margin-bottom: 15px;
+}
+.footer-section ul {
+    list-style: none;
+}
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.footer-section ul li a:hover {
+    color: #ffcc00;
+}
+.footer-section .social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+.footer-section .social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
+.footer-section .social-links a:hover {
+    background: #ffcc00;
+    color: #333;
+    transform: translateY(-3px);
+}
+
+/* Footer Payment Methods Section */
+.footer-payment-methods {
+    max-width: 1200px;
+    margin: 30px auto 0;
+    text-align: center;
+}
+.footer-payment-methods h4 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #ffcc00;
+    font-weight: 600;
+}
+.payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.payment-icons img {
+    height: 40px;
+    max-width: 80px;
+    background-color: white;
+    padding: 5px;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+    object-fit: contain;
+}
+.payment-icons img:hover {
+    transform: scale(1.1);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+/* Support Buttons */
+.support-buttons {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 100;
+}
+.support-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    text-decoration: none;
+}
+.support-btn:hover {
+    transform: scale(1.1);
+}
+.support-btn.telegram {
+    background: #0088cc;
+}
+.support-btn.whatsapp {
+    background: #25D366;
+}
+/* Overlay */
+#overlay {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 500;
+}
+#overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+/* Responsive */
+@media(max-width:1200px){
+    .package {
+        width: calc(50% - 30px);
+        max-width: 350px;
+    }
+}
+@media(max-width:768px){
+    .sidebar {
+        width: 250px;
+    }
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    .hero h2 {
+        font-size: 1.5rem;
+    }
+    .tagline {
+        font-size: 1.4rem;
+        min-height: 50px;
+    }
+    .typing-text {
+        font-size: 1.8rem;
+    }
+    .feature {
+        font-size: 1.2rem;
+    }
+    .package {
+        width: 100%;
+        max-width: 350px;
+    }
+    .package-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .services-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .service-column {
+        width: 100%;
+        max-width: 100%;
+    }
+    .bdix-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+    .bdix-content h2 {
+        font-size: 2rem;
+    }
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .support-buttons {
+        bottom: 10px;
+        right: 10px;
+    }
+    .support-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    .dark-mode-toggle {
+        width: 50px;
+        height: 25px;
+    }
+    .dark-mode-toggle-label {
+        width: 50px;
+        height: 25px;
+    }
+    .dark-mode-toggle-label:after {
+        width: 19px;
+        height: 19px;
+        top: 3px;
+        left: 3px;
+    }
+    .dark-mode-toggle input:checked + .dark-mode-toggle-label:after {
+        transform: translateX(25px);
+    }
+    .dark-mode-toggle-label i {
+        font-size: 12px;
+    }
+    .page-title img {
+        height: 30px;
+    }
+}
+
+/* Image size guidelines */
+.image-info {
+    background: #f0f8ff;
+    border-left: 4px solid #2575fc;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+.image-info h3 {
+    color: #1a2a6c;
+    margin-bottom: 10px;
+}
+.image-info ul {
+    margin-left: 20px;
+}
+.image-info li {
+    margin-bottom: 5px;
+}
+
+/* Domain Search Responsive Adjustments */
+@media (max-width: 480px) {
+    .domain-search {
+        padding: 30px 15px;
+    }
+    .domain-search-container {
+        padding: 20px 15px;
+    }
+    .domain-search h2 {
+        font-size: 1.4rem;
+    }
+    .domain-search p {
+        font-size: 0.9rem;
+    }
+    .domain-tlds {
+        gap: 10px;
+    }
+    .domain-tld {
+        padding: 12px 8px;
+    }
+    .domain-tld-name {
+        font-size: 1.2rem;
+    }
+    .domain-tld-price {
+        font-size: 1rem;
+    }
+    .payment-icons img {
+        height: 35px;
+        gap: 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    .domain-search-container {
+        max-width: 600px;
+        padding: 30px;
+    }
+    .domain-search h2 {
+        font-size: 1.8rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <div class="logo-container">
+        <a href="#" class="logo">Miah<span>Host</span></a>
+        <div class="mobile-menu-toggle" id="closeSidebar"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="nav-menu">
+        <ul>
+            <li class="active"><a href="#home"><i class="fas fa-home"></i> HOME</a></li>
+            <li><a href="#services"><i class="fas fa-concierge-bell"></i> OUR SERVICES</a></li>
+            <li><a href="#packages"><i class="fas fa-server"></i> HOSTING</a></li>
+            <li><a href="#reseller"><i class="fas fa-users"></i> RESELLER</a></li>      
+            <li><a href="#domain"><i class="fas fa-globe"></i> DOMAIN</a></li>
+            <li><a href="#contact"><i class="fas fa-envelope"></i> CONTACT US</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="overlay"></div>
+
+<div class="top-bar">
+    <div class="top-bar-left">
+        <div class="mobile-menu-toggle" id="openSidebar"><i class="fas fa-bars"></i></div>
+        <div class="page-title">
+            <img src="images/logo.png" alt="MiahHost"> </div>
+    </div>
+    <div class="dark-mode-toggle">
+        <input type="checkbox" id="dark-mode-toggle">
+        <label for="dark-mode-toggle" class="dark-mode-toggle-label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+        </label>
+    </div>
+</div>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Trust your site to the world's <span style="color:#FFA500;">#1</span></h1>
+            </br>
+            <span id="typing-text" class="typing-text"></span>
+            </br>
+            <div class="promo-banner">
+                Use Promo Code <span class="promo-code" id="promo-code">MIAH10</span>
+            </div>
+            <h2>10% Off for Hosting Plan</h2>            
+            <div class="trustpilot">
+                <a href="https://www.trustpilot.com/review/miahhost.shop" target="_blank">
+                    <span class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </span>
+                    Excellent | Trustpilot Rating
+                </a>
+            </div>
+            <p class="feature">High Speed Hosting With LiteSpeed Web Server</p>
+            <a href="#packages" class="get-started-btn">Get Started</a>
+        </div>
+    </section>
+
+    <section class="domain-search" id="domain">
+        <div class="domain-search-container">
+            <h2>Best | provider in Bangladesh.</h2>
+            <p>Register a domain name to start your journey</p>
+            <div class="domain-search-form">
+                <input type="text" class="domain-search-input" placeholder="Q Search" id="domain-search-input">
+                <button class="domain-search-button" id="domain-search-button">Search</button>
+            </div>
+            <div class="domain-tlds">
+                <div class="domain-tld">
+                    <div class="domain-tld-name">.com</div>
+                    <div class="domain-tld-price">৳ 1450</div>
+                </div>
+                <div class="domain-tld">
+                    <div class="domain-tld-name">.top</div>
+                    <div class="domain-tld-price">৳ 209</div>
+                </div>
+                <div class="domain-tld">
+                    <div class="domain-tld-name">.shop</div>
+                    <div class="domain-tld-price">৳ 200</div>
+                </div>
+                <div class="domain-tld">
+                    <div class="domain-tld-name">.xyz</div>
+                    <div class="domain-tld-price">৳ 220</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="packages" id="packages">
+        <h2>Our Hosting Packages🚀</h2>
+        <div class="package-container">
+            <div class="package">
+                <div class="package-header">
+                    <h3 class="package-name">Cheap Hosting</h3>
+                    <div class="package-price">Started ৳20</div>
+                    <div class="package-period">Per-Month - $ 0.2</div>
+                </div>
+                <div class="package-features">
+                    <ul>
+                        <li><i class="fas fa-check"></i> Host 5 Website</li>
+                        <li><i class="fas fa-check"></i> 5 GB NVME SSD Storage</li>
+                        <li><i class="fas fa-check"></i> Location : Canada</li>
+                        <li><i class="fas fa-check"></i> Unlimited Subdomains</li>
+                        <li><i class="fas fa-check"></i> Unlimited Bandwidth</li>
+                        <li><i class="fas fa-check"></i> Letsencrypt SSL</li>
+                        <li><i class="fas fa-check"></i> Daily Backup</li>
+                        <li><i class="fas fa-check"></i> LiteSpeed Server</li>
+                    </ul>
+                </div>
+                <a href="https://miahhost.shop/signup?plan=starter" class="view-plans-btn">VIEW PLANS</a>
+            </div>
+            
+            <div class="package">
+                <div class="package-header">
+                    <h3 class="package-name">Premium Hosting</h3>
+                    <div class="package-price">Started ৳50</div>
+                    <div class="package-period">Per-Month - $ 0.5</div>
+                </div>
+                <div class="package-features">
+                    <ul>
+                        <li><i class="fas fa-check"></i> Host 10 Website</li>
+                        <li><i class="fas fa-check"></i> 10 GB NVME SSD Storage</li>
+                        <li><i class="fas fa-check"></i> Location : USA</li>
+                        <li><i class="fas fa-check"></i> Unlimited Subdomains</li>
+                        <li><i class="fas fa-check"></i> Unlimited Bandwidth</li>
+                        <li><i class="fas fa-check"></i> Letsencrypt SSL</li>
+                        <li><i class="fas fa-check"></i> Daily Backup</li>
+                        <li><i class="fas fa-check"></i> LiteSpeed Server</li>
+                    </ul>
+                </div>
+                <a href="https://miahhost.shop/signup?plan=business" class="view-plans-btn">VIEW PLANS</a>
+            </div>
+            
+            <div class="package">
+                <div class="package-header">
+                    <h3 class="package-name">Cheap Reseller</h3>
+                    <div class="package-price">Started ৳280</div>
+                    <div class="package-period">Per-Month - $ 2.8</div>
+                </div>
+                <div class="package-features">
+                    <ul>
+                        <li><i class="fas fa-check"></i> Host Unlimited Website</li>
+                        <li><i class="fas fa-check"></i> 20 GB NVME SSD Storage</li>
+                        <li><i class="fas fa-check"></i> Location : Multiple</li>
+                        <li><i class="fas fa-check"></i> Unlimited Subdomains</li>
+                        <li><i class="fas fa-check"></i> Unlimited Bandwidth</li>
+                        <li><i class="fas fa-check"></i> Letsencrypt SSL</li>
+                        <li><i class="fas fa-check"></i> Daily Backup</li>
+                        <li><i class="fas fa-check"></i> LiteSpeed Server</li>
+                    </ul>
+                </div>
+                <a href="https://miahhost.shop/signup?plan=professional" class="view-plans-btn">VIEW PLANS</a>
+            </div>
+            
+            <div class="package">
+                <div class="package-header">
+                    <h3 class="package-name">Premium Reseller</h3>
+                    <div class="package-price">Started ৳350</div>
+                    <div class="package-period">Per-Month - $ 3.5</div>
+                </div>
+                <div class="package-features">
+                    <ul>
+                        <li><i class="fas fa-check"></i> Host Unlimited Website</li>
+                        <li><i class="fas fa-check"></i> 50 GB NVME SSD Storage</li>
+                        <li><i class="fas fa-check"></i> Location : Global CDN</li>
+                        <li><i class="fas fa-check"></i> Unlimited Subdomains</li>
+                        <li><i class="fas fa-check"></i> Unlimited Bandwidth</li>
+                        <li><i class="fas fa-check"></i> Premium SSL</li>
+                        <li><i class="fas fa-check"></i> Daily Backup + Staging</li>
+                        <li><i class="fas fa-check"></i> LiteSpeed + Caching</li>
+                    </ul>
+                </div>
+                <a href="https://miahhost.shop/signup?plan=enterprise" class="view-plans-btn">VIEW PLANS</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="our-services" id="services">
+        <h2>Our Services 🔖</h2>
+        <div class="services-container">
+            <div class="service-column">
+                <h3>Why Choose Us? 🤔</h3>
+                <div class="service-item">
+                    <h4><i class="fas fa-exchange-alt"></i> Free migrations 🚚</h4>
+                    <p>Moving to MiahHost is easy, we'll take care of the migration for you for FREE</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-clock"></i> 24/7 support 🕒</h4>
+                    <p>Our team is always online 24/7 for your support and customer service.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-hdd"></i> Free Daily backup 💾</h4>
+                    <p>We automatically create daily, weekly backups of your entire websites.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-calendar-check"></i> 30 days guarantee ⏳</h4>
+                    <p>Give our high-speed hosting service a try completely risk-free! money back</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-tachometer-alt"></i> High Performance ⚡</h4>
+                    <p>Experience blazing fast loading speeds with our optimized servers and LiteSpeed technology.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-shield-alt"></i> Top Security 🔒</h4>
+                    <p>Your website is protected with advanced security measures and free SSL certificates.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-globe"></i> Global Reach 🌍</h4>
+                    <p>Our servers are strategically located worldwide for optimal performance.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-hand-holding-usd"></i> Affordable Pricing 💰</h4>
+                    <p>Get premium hosting features at competitive prices that fit any budget.</p>
+                </div>
+            </div>
+            <div class="service-column">
+                <h3>Hosting Features 🚀</h3>
+                <div class="service-item">
+                    <h4><i class="fas fa-money-bill-wave"></i> Money Back Guarantee 💸</h4>
+                    <p>We have 30 Days moneyback guarantee, So you can try our service without any risk. We'll refund you if you're not satisfied. Your satisfaction is our top priority.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-truck-moving"></i> Free Data Migration 🚛</h4>
+                    <p>You can transfer your web hosting data from your previous hosting company to us. Our team can move your site to us. We offer free website data migration.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-cogs"></i> Softaculous script installer ⚙️</h4>
+                    <p>Instantly install scripts such as Wordpress in 3 easy to follow steps. Lots of software including Wordpress more then 451+. Easy to install softaculous tool.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-shield-alt"></i> Website Security 🛡️</h4>
+                    <p>Stop malware before it gets a chance to infect your site. We scan your site all content daily and automatically remove any detected malware. It's fully free.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-clock"></i> 99.9% Uptime Guarantee ⏰</h4>
+                    <p>We understand the uptime importance. Our servers are optimized with the latest software and are only hosted within the best datacenters, allowing us to achieve 99.9% uptime guarantee.</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-server"></i> High Performance SSD Servers 💽</h4>
+                    <p>We use only top of the line server hardware, and this reflects in the quality service that we provide. We are using Enterprise NVM hard drives in a Raid array to give you that extra speed boost!</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-lock"></i> Free SSL Certificate 🔐</h4>
+                    <p>Our all web hosting plan Life-time FREE Let's Encrypt SSL certificates with just a few clicks in your cPanel/Directadmin. Secure customer data and improve SEO ranking using this limited time offer!</p>
+                </div>
+                <div class="service-item">
+                    <h4><i class="fas fa-headset"></i> Live support 🎧</h4>
+                    <p>We provide office hours live chat support via facebook messenger, whatsapp, live Call Support. Speak to our staff live (GMT+6) 10AM - 9PM, 24/7 Ticket support and they will be happy to help.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bdix-section">
+        <div class="bdix-container">
+            <div class="bdix-image">
+                <img src="images/bdix-hosting.png" alt="BDIX Hosting in Bangladesh">
+            </div>
+            <div class="bdix-content">
+                <h2>Experience Blazing Fast BDIX Speed ⚡</h2>
+                <p>
+                    আমরা সেরা BDIX হোস্টিং অফার করি, যা বাংলাদেশের ব্যবহারকারীদের জন্য দ্রুততম সংযোগ নিশ্চিত করে। আমাদের BDIX সার্ভারে আপনার ওয়েবসাইট হোস্ট করার মাধ্যমে, আপনার স্থানীয় ভিজিটররা অবিশ্বাস্যরকম কম ল্যাটেন্সি এবং বিদ্যুৎ গতির লোডিং টাইম উপভোগ করবে। এটি ব্যবহারকারীর অভিজ্ঞতাকে উন্নত করে, আপনার SEO বাড়ায় এবং আপনার ভিজিটরদের ধরে রাখে। সেরা BDIX পারফর্ম্যান্সের জন্য MiahHost বেছে নিন!
+                </p>
+                <a href="#packages" class="get-started-btn">Explore BDIX Plans</a>
+            </div>
+        </div>
+    </section>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>About MiahHost</h3>
+            <p>MiahHost is a premium web hosting provider offering reliable, high-performance hosting solutions for businesses and individuals worldwide.</p>
+            <div class="social-links">
+                <a href="https://facebook.com/miahrasel819/"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://x.com/miahrasel819/"><i class="fab fa-twitter"></i></a>
+                <a href="https://Instagram.com/miahrasel819/"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/miahrasel819/"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h3>Our Services</h3>
+            <ul>
+                <li><a href="#">Web Hosting</a></li>
+                <li><a href="#">Reseller Hosting</a></li>
+                <li><a href="#">VPS Hosting</a></li>
+                <li><a href="#">Domain Registration</a></li>
+                <li><a href="#">SSL Certificates</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Contact Us</h3>
+            <p><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh, 1939</p>
+            <p><i class="fas fa-phone"></i> +8809638730156</p>
+            <p><i class="fas fa-envelope"></i> miahrasel819@gmail.com</p>
+        </div>
+    </div>
+
+    <div class="footer-payment-methods">
+        <h4>We Accept</h4>
+        <div class="payment-icons">
+            <img src="images/bkash.png" alt="Bkash Payment">
+            <img src="images/nagad.png" alt="Nagad Payment">
+            <img src="images/rocket.png" alt="Rocket Payment">
+            <img src="images/dbbl.png" alt="Dutch Bangla Bank">
+            <img src="images/visa.svg" alt="Visa Card">
+            <img src="images/mastercard.svg" alt="Mastercard">
+            <img src="images/amex.svg" alt="American Express">
+            <img src="images/paypal.svg" alt="PayPal">
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025-♾️ MiahHost. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<div class="support-buttons">
+    <a href="https://t.me/miahrasel819/" class="support-btn telegram">
+        <i class="fab fa-telegram"></i>
+    </a>
+    <a href="https://wa.me/+8801928918665" class="support-btn whatsapp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</div>
+
+<script>
+const openBtn = document.getElementById('openSidebar');
+const closeBtn = document.getElementById('closeSidebar');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+function openSidebar(){
+    sidebar.classList.add('active');
+    overlay.classList.add('active');    
+}
+function closeSidebar(){
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+}
+openBtn.addEventListener('click', openSidebar);
+closeBtn.addEventListener('click', closeSidebar);
+overlay.addEventListener('click', closeSidebar);
+
+// Active menu
+document.querySelectorAll('.nav-menu a').forEach(link=>{
+    link.addEventListener('click', ()=>{
+        document.querySelectorAll('.nav-menu li').forEach(li=> li.classList.remove('active'));
+        link.parentElement.classList.add('active');
+        closeSidebar();
+    });
+});
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if(targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if(targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// Typing effect
+const typingText = document.getElementById('typing-text');
+const words = ['Cheap Domain', 'Dedicated Hosting', 'SubDomain Hosting', 'Shared Hosting'];
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typingDelay = 100;
+let erasingDelay = 50;
+let newWordDelay = 1000;
+
+function type() {
+    const currentWord = words[wordIndex];
+    
+    if (isDeleting) {
+        // Remove character
+        typingText.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+        typingDelay = erasingDelay;
+    } else {
+        // Add character
+        typingText.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+        typingDelay = 100;
+    }
+    
+    if (!isDeleting && charIndex === currentWord.length) {
+        // Word complete, start deleting
+        isDeleting = true;
+        typingDelay = newWordDelay;
+    } else if (isDeleting && charIndex === 0) {
+        // Word deleted, move to next word
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        typingDelay = 500;
+    }
+    
+    setTimeout(type, typingDelay);
+}
+
+// Promo code copy functionality
+const promoCode = document.getElementById('promo-code');
+promoCode.addEventListener('click', function() {
+    const textArea = document.createElement('textarea');
+    textArea.value = 'MIAH10';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    
+    // Show copied message
+    this.classList.add('copied');
+    setTimeout(() => {
+        this.classList.remove('copied');
+    }, 2000);
+});
+
+// Dark Mode Toggle Functionality
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+}
+
+// Check for saved dark mode preference
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    darkModeToggle.checked = true;
+}
+
+// Add event listener to dark mode toggle
+darkModeToggle.addEventListener('change', toggleDarkMode);
+
+// Domain Search Functionality
+const domainSearchInput = document.getElementById('domain-search-input');
+const domainSearchButton = document.getElementById('domain-search-button');
+
+domainSearchButton.addEventListener('click', function() {
+    const domainName = domainSearchInput.value.trim();
+    if (domainName) {
+        // Redirect to WHMCS domain search with the entered domain
+        // Replace with your actual WHMCS domain search URL
+        window.open(`https://miahhost.shop/domainchecker.php?search=bulk&domain=${encodeURIComponent(domainName)}`, '_blank');
+    } else {
+        alert('Please enter a domain name to search');
+    }
+});
+
+// Allow Enter key to trigger domain search
+domainSearchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        domainSearchButton.click();
+    }
+});
+
+// Start the typing effect
+window.onload = function() {
+    setTimeout(type, 1000);
+};
+</script>
+
+</body>
+</html>
